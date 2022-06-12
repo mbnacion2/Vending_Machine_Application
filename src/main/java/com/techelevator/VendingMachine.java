@@ -2,13 +2,11 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class VendingMachine {
     private List<Items> items = new ArrayList<>();
-
+    private double currentBalance;
     public List<Items> getItems() {
         return items;
     }
@@ -32,6 +30,54 @@ public class VendingMachine {
             System.err.print("File not found.");
         }
     }
+
+    public void feedMoney(Double money){
+        this.currentBalance+=money;
+        Logger.log("FEED MONEY $"+ money +" $"+this.currentBalance );
+    }
+
+    public Double getCurrentBalance(){
+        return currentBalance;
+    }
+
+    public Items dispenseItem(Items item){
+        double newBalance=Double.valueOf(this.currentBalance- item.getPrice());
+        Logger.log(item.getProductName() + " "+ item.getSlotLocation()+ " $" + this.currentBalance +" $"+ newBalance);
+        this.currentBalance= newBalance;
+        int newCount = item.getCount()-1;
+        item.setCount(newCount);
+
+
+        return item;
+
+    }
+
+    public Map<String, Integer> makeChange() {
+        Map<String, Integer> numberOfCoins = new HashMap<String, Integer>();
+        double changeAmount=this.currentBalance;
+
+        int numberOfQuarters = (int) (this.currentBalance / 0.25);
+        this.currentBalance -= numberOfQuarters * 0.25;
+        numberOfCoins.put("Quarters: ", numberOfQuarters);
+
+        int numberOfDimes = (int) (this.currentBalance / 0.10);
+        this.currentBalance -= numberOfDimes * 0.10;
+        numberOfCoins.put("Dimes: ", numberOfDimes);
+        int numberOfNickels;
+        if (this.currentBalance > 0) {
+            numberOfNickels = 1;
+
+        } else {
+            numberOfNickels = 0;
+        }
+        numberOfCoins.put("Nickels: ", numberOfNickels);
+
+        this.currentBalance=0.00;
+        Logger.log("GIVE CHANGE $"+ changeAmount+ " $" + this.currentBalance);
+        return numberOfCoins;
+
+    }
+
 
     public Items getItem(String slotLocation) {
         for (Items item : this.items) {

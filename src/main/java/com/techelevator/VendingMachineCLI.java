@@ -2,6 +2,10 @@ package com.techelevator;
 
 import com.techelevator.view.Menu;
 
+import java.sql.SQLOutput;
+import java.util.Map;
+import java.util.Scanner;
+
 public class VendingMachineCLI {
 
 	private static final String MAIN_MENU_OPTION_DISPLAY_ITEMS = "Display Vending Machine Items";
@@ -18,6 +22,12 @@ public class VendingMachineCLI {
 	private VendingMachine vendingMachine;
 	public VendingMachineCLI(Menu menu) {
 		this.menu = menu;
+		try{
+		    this.vendingMachine=new VendingMachine();
+        }catch(Exception e){
+            System.out.println("Error during start up"+ e.getMessage());
+
+        }
 	}
 
 	public void run() {
@@ -29,37 +39,139 @@ public class VendingMachineCLI {
 				displayItems();
 			} else if (choice.equals(MAIN_MENU_OPTION_PURCHASE)) {
 				// do purchase
-				Purchase();
+				purchaseMenu();
 			}else if(choice.equals(MAIN_MENU_OPTION_EXIT)){
 				//program exits
 				break;
 			}
 		}
 	}
-	private void Purchase(){
+	private void purchaseMenu(){
+
+		//System.out.print("Current Money Provided: " + vendingMachine.getCurrentBalance() +"\n\r");
 		while (true) {
+
 			String choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
 
 			if (choice.equals(PURCHASE_OPTION_FEED_MONEY)) {
 				// FEED MONEY
-
+				enterMoney();
 			} else if (choice.equals(PURCHASE_OPTION_SELECT_PRODUCT)) {
 				// SELECT PRODUCT, update balance and return to purchase menu
-
+				selectProduct();
 			}else if(choice.equals(PURCHASE_OPTION_FINISH_TRANSACTION)){
 				//FINISH TRANSACTION and return to Main menu
-
+				finishTransaction();
 			}
-			System.out.print("Current Money Provided: " );
+			System.out.println("\n\r Current Money Provided: " + vendingMachine.getCurrentBalance()+"\n\r");
+
 		}
+
 	}
 
 	private void displayItems(){
 		//Display the vending machine items
 		for(Items item: vendingMachine.getItems()){
-			System.out.print(item.getSlotLocation() + ", $" + item.getPrice());
+			System.out.println(item.getSlotLocation() +" "+ item.getProductName()+ ", $" + item.getPrice() + " count: "+ item.getCount());
 		}
 	}
+	 private void enterMoney() {
+         Double money = 0.00;
+         boolean answerYes = true;
+         Scanner scanner = new Scanner(System.in);
+         while (answerYes) {
+
+			 System.out.println("\n\r\n\r FEED MONEY");
+			 System.out.println("Accepts: $1, $2, $5, $10 only. \n\r");
+
+             System.out.print("Enter dollar amount: ");
+             String userInput = scanner.nextLine();
+             int moneyInput = 0;
+
+             try {
+                 moneyInput = Integer.parseInt(userInput);
+                 if(moneyInput==1 || moneyInput==2 || moneyInput==5 || moneyInput==10){
+                     money= (double)moneyInput;
+
+                     vendingMachine.feedMoney(money);
+					 System.out.println("Current money provided : $" + vendingMachine.getCurrentBalance());
+                 }else{
+					 System.out.println("Invalid input.");
+				 }
+				 System.out.print("\n\r Do you want to enter money again? Y or N: ");
+                 String yesNo=scanner.nextLine();
+                 if(yesNo.equalsIgnoreCase("Y")){
+                 	answerYes=true;
+				 }else{
+                 	answerYes=false;
+				 }
+
+
+             } catch (Exception e) {
+
+             }
+
+
+         }
+     }
+
+     private void selectProduct(){
+		System.out.println("\n\r\n\r ITEMS");
+		displayItems();// Displays items
+		boolean yes= true;
+		while(yes){
+			System.out.print("\n\r Enter product code: ");
+			Items itemChoice= getProductChoice();// calls getProductChoice() to refer to users choice
+			if(itemChoice.getCount()==0){
+				System.out.println("ITEM SOLD OUT");
+			}else if( itemChoice.getPrice()> this.vendingMachine.getCurrentBalance()){
+				System.out.println("Insufficient funds.");
+				yes=false;
+
+			}else{
+				Items dispenseItem= this.vendingMachine.dispenseItem(itemChoice);
+				System.out.println("Item dispensed: "+ dispenseItem.getProductName() + " $"+ dispenseItem.getPrice());
+				System.out.println("Balance remaining: $"+ vendingMachine.getCurrentBalance());
+				//Messages for each type
+				if(dispenseItem.getType().equalsIgnoreCase("Chip")){
+					System.out.println("Crunch Crunch, Yum!");
+				}else if(dispenseItem.getType().equalsIgnoreCase("Candy")){
+					System.out.println("Munch Munch, Yum!");
+				}else if(dispenseItem.getType().equalsIgnoreCase("Drink")){
+					System.out.println("Glug Glug, Yum!");
+				}else if(dispenseItem.getType().equalsIgnoreCase("Gum")){
+					System.out.println("Chew Chew, Yum!");
+				}
+				yes=false;
+			}
+		}
+
+
+	 }
+
+	 private Items getProductChoice(){
+		Scanner scanner= new Scanner(System.in);
+		while(true){
+			String userInput= scanner.nextLine();
+			Items item= this.vendingMachine.getItem(userInput.trim());
+			if(item==null){
+				System.out.println("Product not found");
+				break;
+			}else{
+				return item;
+			}
+		}
+		return null;
+	 }
+
+	 private void finishTransaction(){
+		 System.out.println("\n\r\n\rYour change is: $"+ vendingMachine.getCurrentBalance());
+		 Map<String, Integer> changeGiven= this.vendingMachine.makeChange();
+		 for(Map.Entry<String, Integer> moneyOut: changeGiven.entrySet()){
+			 System.out.println(moneyOut.getKey() + " "+ moneyOut.getValue());
+
+		 }
+	 }
 
 	public static void main(String[] args) {
 		Menu menu = new Menu(System.in, System.out);
