@@ -2,6 +2,7 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class VendingMachine {
@@ -41,7 +42,8 @@ public class VendingMachine {
     }
 
     public Items dispenseItem(Items item){
-        double newBalance=Double.valueOf(this.currentBalance- item.getPrice());
+        DecimalFormat df = new DecimalFormat("#.##");
+        double newBalance=Double.valueOf(df.format(this.currentBalance- item.getPrice()));
         Logger.log(item.getProductName() + " "+ item.getSlotLocation()+ " $" + this.currentBalance +" $"+ newBalance);
         this.currentBalance= newBalance;
         int newCount = item.getCount()-1;
@@ -53,18 +55,19 @@ public class VendingMachine {
     }
 
     public Map<String, Integer> makeChange() {
+        DecimalFormat df = new DecimalFormat("#.##");
         Map<String, Integer> numberOfCoins = new HashMap<String, Integer>();
-        double changeAmount=this.currentBalance;
+        Double changeAmount=this.currentBalance;
 
         int numberOfQuarters = (int) (this.currentBalance / 0.25);
-        this.currentBalance -= numberOfQuarters * 0.25;
+        this.currentBalance = Double.valueOf(df.format((this.currentBalance - (numberOfQuarters * 0.25))));
         numberOfCoins.put("Quarters: ", numberOfQuarters);
 
         int numberOfDimes = (int) (this.currentBalance / 0.10);
-        this.currentBalance -= numberOfDimes * 0.10;
+        this.currentBalance = Double.valueOf(df.format((this.currentBalance - (numberOfDimes * 0.10))));
         numberOfCoins.put("Dimes: ", numberOfDimes);
         int numberOfNickels;
-        if (this.currentBalance > 0) {
+        if (this.currentBalance == 0.05) {
             numberOfNickels = 1;
 
         } else {

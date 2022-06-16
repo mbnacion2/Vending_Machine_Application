@@ -32,6 +32,7 @@ public class VendingMachineCLI {
 
 	public void run() {
 		while (true) {
+			System.out.println("\n\r\n\rMAIN MENU");
 			String choice = (String) menu.getChoiceFromOptions(MAIN_MENU_OPTIONS);
 
 			if (choice.equals(MAIN_MENU_OPTION_DISPLAY_ITEMS)) {
@@ -50,7 +51,7 @@ public class VendingMachineCLI {
 
 		//System.out.print("Current Money Provided: " + vendingMachine.getCurrentBalance() +"\n\r");
 		while (true) {
-
+			System.out.println("\n\rPURCHASE MENU");
 			String choice = (String) menu.getChoiceFromOptions(PURCHASE_MENU_OPTIONS);
 
 			if (choice.equals(PURCHASE_OPTION_FEED_MONEY)) {
@@ -62,6 +63,7 @@ public class VendingMachineCLI {
 			}else if(choice.equals(PURCHASE_OPTION_FINISH_TRANSACTION)){
 				//FINISH TRANSACTION and return to Main menu
 				finishTransaction();
+				break;
 			}
 			System.out.println("\n\r Current Money Provided: " + vendingMachine.getCurrentBalance()+"\n\r");
 
@@ -71,6 +73,7 @@ public class VendingMachineCLI {
 
 	private void displayItems(){
 		//Display the vending machine items
+		System.out.println("\n\r\n\rITEMS");
 		for(Items item: vendingMachine.getItems()){
 			System.out.println(item.getSlotLocation() +" "+ item.getProductName()+ ", $" + item.getPrice() + " count: "+ item.getCount());
 		}
@@ -102,8 +105,11 @@ public class VendingMachineCLI {
                  String yesNo=scanner.nextLine();
                  if(yesNo.equalsIgnoreCase("Y")){
                  	answerYes=true;
-				 }else{
-                 	answerYes=false;
+				 }else if (yesNo.equalsIgnoreCase("N")) {
+					 answerYes = false;
+				 } else {
+					 System.out.println("Invalid Input");
+					 break;
 				 }
 
 
@@ -116,7 +122,7 @@ public class VendingMachineCLI {
      }
 
      private void selectProduct(){
-		System.out.println("\n\r\n\r ITEMS");
+
 		displayItems();// Displays items
 		boolean yes= true;
 		while(yes){
