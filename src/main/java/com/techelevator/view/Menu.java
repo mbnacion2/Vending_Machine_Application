@@ -15,10 +15,14 @@ public class Menu {
 		this.in = new Scanner(input);
 	}
 
-	public Object getChoiceFromOptions(Object[] options) {
+	public Object getChoiceFromOptions(Object[] options){
+		return getChoiceFromOptions(options, null);
+	}
+
+	public Object getChoiceFromOptions(Object[] options, String message) {
 		Object choice = null;
 		while (choice == null) {
-			displayMenuOptions(options);
+			displayMenuOptions(options, message);
 			choice = getChoiceFromUserInput(options);
 		}
 		return choice;
@@ -41,11 +45,14 @@ public class Menu {
 		return choice;
 	}
 
-	private void displayMenuOptions(Object[] options) {
+	private void displayMenuOptions(Object[] options, String message) {
 		out.println();
 		for (int i = 0; i < options.length; i++) {
 			int optionNum = i + 1;
 			out.println(optionNum + ") " + options[i]);
+		}
+		if(message!=null){
+			out.println(message);
 		}
 		out.print(System.lineSeparator() + "Please choose an option >>> ");
 		out.flush();

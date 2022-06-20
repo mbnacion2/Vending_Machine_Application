@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 public class Logger {
 
     private static PrintWriter logWriter= null;
-
+    //create log.txt file to keep log of transactions
     public static void log(String message){
         try{
             if(logWriter==null){
