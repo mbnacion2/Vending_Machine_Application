@@ -44,7 +44,7 @@ public class VendingMachine {
     public void feedMoney(Double money){
         //Add user input money to current balance each time
         this.currentBalance+=money;
-        Logger.log("FEED MONEY "+ toCurrencyString(money)+ " "+ toCurrencyString(this.currentBalance));
+        Logger.log("FEED MONEY "+ toCurrencyString(money)+ " "+ toCurrencyString(this.currentBalance));//log transaction
     }
 
     public Double getCurrentBalance(){
@@ -55,7 +55,7 @@ public class VendingMachine {
         //Dispense item when user balance is enough and is not out of stock
         DecimalFormat df = new DecimalFormat("#.##");
         double newBalance=Double.valueOf(df.format(this.currentBalance- item.getPrice()));// subtract the price from users balance
-        Logger.log(item.getProductName() + " "+ item.getSlotLocation()+ " " + toCurrencyString(this.currentBalance) +" "+ toCurrencyString(newBalance));
+        Logger.log(item.getProductName() + " "+ item.getSlotLocation()+ " " + toCurrencyString(this.currentBalance) +" "+ toCurrencyString(newBalance)); //log transaction
         this.currentBalance= newBalance; //balance is updated
         int newCount = item.getCount()-1;// item count is one less
         item.setCount(newCount); //update item count
@@ -89,6 +89,7 @@ public class VendingMachine {
         numberOfCoins.put(NICKELS+ ": ", numberOfNickels);
 
         this.currentBalance=0.00;
+        //log transaction
         Logger.log("GIVE CHANGE "+ toCurrencyString(changeAmount)+ " " + toCurrencyString(this.currentBalance));
         return numberOfCoins;
 

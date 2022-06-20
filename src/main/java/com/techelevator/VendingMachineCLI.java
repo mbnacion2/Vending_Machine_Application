@@ -76,9 +76,9 @@ public class VendingMachineCLI {
 		//Display the vending machine items
 		System.out.println("\n\r\n\rITEMS"); //Title
 		for (Items item : vendingMachine.getItems()) {
-			if (item.getCount() == 0) {
+			if (item.getCount() == 0) { //When item count is zero, show that it is "SOLD OUT"
 				System.out.println(item.getSlotLocation() + " " + item.getProductName() + ", Price: " + toCurrencyString(item.getPrice()) + " SOLD OUT");
-			} else {
+			} else { //Display item information
 				System.out.println(item.getSlotLocation() + " " + item.getProductName() + ", Price: " + toCurrencyString(item.getPrice()) + " Count: " + item.getCount());
 			}
 		}
@@ -138,11 +138,11 @@ public class VendingMachineCLI {
 		boolean yes= true;
 		while(yes) {
 			System.out.print("\n\r Enter product code: ");// Prompt user to select an item
-			Items itemChoice = getProductChoice();// calls getProductChoice() to refer to users choice input
+			Items itemChoice = getProductChoice();// Calls getProductChoice() to refer to users choice input
 				if (itemChoice == null) {
-					//invalid item selected
+					//Invalid item selected
 					System.out.println("Product not found");
-					yes = false;//return user to purchase menu
+					yes = false;//Return user to purchase menu
 				} else if (itemChoice.getCount() == 0) {
 					//If item count is zero, let user know it is sold out
 					System.out.println("ITEM SOLD OUT");
@@ -179,7 +179,7 @@ public class VendingMachineCLI {
 		while(true){
 			String userInput= scanner.nextLine();
 			Items item= this.vendingMachine.getItem(userInput.trim());
-			if(item==null){
+			if(item==null){ //Item not present in inventory was entered
 				break;
 			}else{
 				//Item is present in inventory

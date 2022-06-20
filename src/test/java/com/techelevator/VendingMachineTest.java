@@ -23,6 +23,7 @@ public class VendingMachineTest {
     }
     @Test
     public void test_feed_money_balance(){
+        //test feedMoney() method
         //check if balance is initially zero
         Assert.assertTrue(vendingMachine.getCurrentBalance()==0.0);
         vendingMachine.feedMoney(1.0);
@@ -42,6 +43,7 @@ public class VendingMachineTest {
     }
     @Test
     public void test_presence_of_items() {
+        //check info for item "A1"
         Items item = vendingMachine.getItem("A1");
         Assert.assertNotNull(item);
         Assert.assertEquals(item.getSlotLocation(),"A1");
@@ -49,6 +51,7 @@ public class VendingMachineTest {
         Assert.assertEquals(item.getPrice(),3.05,0.00);
         Assert.assertEquals(item.getType(),"Chip");
         Assert.assertEquals(item.getCount(),5);
+        //check info for item "C3"
         Items item2 = vendingMachine.getItem("C3");
         Assert.assertNotNull(item2);
         Assert.assertEquals(item2.getSlotLocation(),"C3");
@@ -60,6 +63,7 @@ public class VendingMachineTest {
 
     @Test
     public void test_dispense_give_change(){
+        //test dispenseItem() method
         DecimalFormat df = new DecimalFormat("#.##");
         vendingMachine.feedMoney(5.0);
         Items item = vendingMachine.getItem("A1");
@@ -69,7 +73,7 @@ public class VendingMachineTest {
         Assert.assertEquals(vendingMachine.getCurrentBalance(), (Double.valueOf(df.format(5.0-item.getPrice()))),0.00);
 
 
-        //test makeChange
+        //test makeChange() method
         Map<String, Integer> change = vendingMachine.makeChange();
         for (Map.Entry<String, Integer> entry: change.entrySet()){
             int expectedCount = 0;
