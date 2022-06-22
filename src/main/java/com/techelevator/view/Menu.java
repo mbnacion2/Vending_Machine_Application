@@ -42,7 +42,9 @@ public class Menu {
 		Object choice = null;
 
 		while (choice == null) {
-			out.println(System.lineSeparator() + title); //Title
+			if(title!=null) {
+				out.println(System.lineSeparator() + title); //Title
+			}
 			displayMenuOptions(options, message);
 			choice = getChoiceFromUserInput(options);
 		}
