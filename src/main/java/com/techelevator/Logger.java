@@ -6,6 +6,11 @@ import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ *
+ * The Logger class handles writing log messages to a file
+ *
+ */
 public class Logger {
 
     private static PrintWriter logWriter= null;
@@ -18,8 +23,6 @@ public class Logger {
             }
             logWriter.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy hh:mm:ss a")) +" "+ message);
             logWriter.flush();
-
-
 
         }catch (Exception e){
             System.err.println("Error writing to Log File.");

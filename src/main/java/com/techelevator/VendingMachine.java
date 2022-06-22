@@ -6,10 +6,16 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 import static com.techelevator.CurrencyFormat.toCurrencyString;
-
+/**
+ *
+ * The VendingMachine class contains all the data and methods that represent the vending machine
+ * including the list of products, the price for each product, the number of items remaining, amount of money put in, etc.
+ * The class also has the method that calculates the amount of change to return to the user in quarters, dimes and nickels.
+ */
 public class VendingMachine {
     private List<Items> items = new ArrayList<>();
     private double currentBalance;
+    //constants for money used for change makeChange() method
     private static final String QUARTERS= "Quarters";
     private static final String DIMES= "Dimes";
     private static final String NICKELS= "Nickels";
@@ -18,14 +24,14 @@ public class VendingMachine {
         return items;
     }
 
-
-
     public VendingMachine() throws Exception{
-        //Read through vendingmachine.csv file to stock inventory information
+        // 1. Read through vendingmachine.csv file to stock inventory information
+        //hardcoded file path and put try and catch if there is error reading the file
         File file = new File("vendingmachine.csv");
         try (Scanner inputFile = new Scanner(file)) {
             while (inputFile.hasNextLine()) {
                 String line = inputFile.nextLine();
+                //converting a line from input file
                 String[] itemInfo =line.split("\\|");
                 Items newItems= new Items();
                 newItems.setSlotLocation(itemInfo[0]);
@@ -35,9 +41,9 @@ public class VendingMachine {
                 newItems.getCount();
                 items.add(newItems);
             }
-
-        }catch(FileNotFoundException e){
-            System.err.print("File not found.");
+        }catch(Exception e){
+            //error in reading vendingmachine.csv
+            System.err.print("Error reading Inventory File");
         }
     }
 
@@ -54,19 +60,21 @@ public class VendingMachine {
     public Items dispenseItem(Items item){
         //Dispense item when user balance is enough and is not out of stock
         DecimalFormat df = new DecimalFormat("#.##");
-        double newBalance=Double.valueOf(df.format(this.currentBalance- item.getPrice()));// subtract the price from users balance
-        Logger.log(item.getProductName() + " "+ item.getSlotLocation()+ " " + toCurrencyString(this.currentBalance) +" "+ toCurrencyString(newBalance)); //log transaction
-        this.currentBalance= newBalance; //balance is updated
-        int newCount = item.getCount()-1;// item count is one less
-        item.setCount(newCount); //update item count
-
-
+        // subtract the price from users balance
+        double newBalance=Double.valueOf(df.format(this.currentBalance- item.getPrice()));
+        //log transaction
+        Logger.log(item.getProductName() + " "
+                + item.getSlotLocation()+ " "
+                + toCurrencyString(this.currentBalance) +" "
+                + toCurrencyString(newBalance));
+        // 4.Balance and item count are updated after purchase and carried over to purchase menu
+        this.currentBalance= newBalance;
+        item.decrement(); //item count less 1 and sales count + 1 (for sales report)
         return item;//finish dispensing the item
-
     }
 
     public Map<String, Integer> makeChange() {
-        //make remaining balance into change using least amount of coins
+        // 5. make remaining balance into change using least amount of coins
         DecimalFormat df = new DecimalFormat("#.##");
         Map<String, Integer> numberOfCoins = new HashMap<String, Integer>();
         Double changeAmount=this.currentBalance;
@@ -87,10 +95,10 @@ public class VendingMachine {
             numberOfNickels = 0;
         }
         numberOfCoins.put(NICKELS+ ": ", numberOfNickels);
-
         this.currentBalance=0.00;
         //log transaction
-        Logger.log("GIVE CHANGE "+ toCurrencyString(changeAmount)+ " " + toCurrencyString(this.currentBalance));
+        Logger.log("GIVE CHANGE "+ toCurrencyString(changeAmount)+ " "
+                + toCurrencyString(this.currentBalance));
         return numberOfCoins;
 
     }

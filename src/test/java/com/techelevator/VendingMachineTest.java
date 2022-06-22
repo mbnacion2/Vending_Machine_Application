@@ -39,7 +39,6 @@ public class VendingMachineTest {
         //check if balance is 10.0
         Assert.assertTrue(vendingMachine.getCurrentBalance()==18.0);
         vendingMachine.makeChange();
-
     }
     @Test
     public void test_presence_of_items() {

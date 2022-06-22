@@ -1,11 +1,28 @@
 package com.techelevator;
-
+/**
+ *
+ * The Items class represent a single item in the product list and has the following properties
+ * Slot Location, Product Name, Price, Type (Chip, Drink or Candy), Count (Items remaining)
+ *
+ */
 public class Items {
     private String slotLocation= " ";
     private String productName= " ";
     private double price=0.00;
     private String type= " ";
     private int count= 5;
+    private int salesCount=0;
+
+    public int getSalesCount() {
+        return salesCount;
+    }
+
+    public void decrement() {
+        if(this.count>0) {
+            this.count--;
+            this.salesCount++;
+        }
+    }
 
     public int getCount() {
         return count;
