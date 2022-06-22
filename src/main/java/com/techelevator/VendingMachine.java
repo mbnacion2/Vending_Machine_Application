@@ -15,18 +15,17 @@ import static com.techelevator.CurrencyFormat.toCurrencyString;
 public class VendingMachine {
     private List<Items> items = new ArrayList<>();
     private double currentBalance;
-    //constants for money used for change makeChange() method
+    //constants for money used for change in makeChange()method
     private static final String QUARTERS= "Quarters";
     private static final String DIMES= "Dimes";
     private static final String NICKELS= "Nickels";
-
     public List<Items> getItems() {
         return items;
     }
-
     public VendingMachine() throws Exception{
-        // 1. Read through vendingmachine.csv file to stock inventory information
-        //hardcoded file path and put try and catch if there is error reading the file
+        //constructor which reads through the vendingmachine.csv file to convert into items in the
+        // inventory, represented by Items property which is a List of Items
+        //enclosed in a try and catch block to capture any error in reading the inventory file
         File file = new File("vendingmachine.csv");
         try (Scanner inputFile = new Scanner(file)) {
             while (inputFile.hasNextLine()) {

@@ -79,10 +79,11 @@ public class VendingMachineCLI {
 	}
 
 	private void displayItems() {
-		//2. Display the Inventory items
+		// Display the items in the inventory
 		System.out.println("\n\r\n\rITEMS"); //Title
 		for (Items item : vendingMachine.getItems()) {
-			if (item.getCount() == 0) { //When item count is zero, show that it is "SOLD OUT"
+			//check item count is zero, display "SOLD OUT" message
+			if (item.getCount() == 0) {
 				System.out.println(item.getSlotLocation() + " "
 						+ item.getProductName()
 						+ ", Price: " + toCurrencyString(item.getPrice())

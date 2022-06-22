@@ -18,6 +18,7 @@ public class Items {
     }
 
     public void decrement() {
+        //decrease item count, increase sales count
         if(this.count>0) {
             this.count--;
             this.salesCount++;
